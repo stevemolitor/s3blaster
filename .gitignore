@@ -2,3 +2,4 @@ node_modules
 .tern_port
 lib/.tern_port
 test/.tern_port
+bin/.tern-port

@@ -1,17 +1,24 @@
 #!/usr/bin/env node
 
 var s3copy = require('../lib/s3copy');
+var minimist = require('minimist');
 
-if (process.argv.length !== 5) {
-  console.log('USAGE: s3copy [SRC_DIR] [S3_BUCKET] [S3_DEST_PATH]');
+var argv = minimist(process.argv.slice(2));
+var args = argv._;
+
+if (args.length !== 3) {
+  console.log('USAGE: s3copy [SRC_DIR] [S3_BUCKET] [S3_DEST_PATH] {OPTIONS}');
+  console.log('OPTIONS include -v for verbose');
   process.exit(1);
 }
 
-var srcDir = process.argv[2];
-var s3Bucket = process.argv[3]
-var destPath = process.argv[4];
+var srcDir = args[0];
+var s3Bucket = args[1];
+var destPath = args[2];
+var verbose = argv.v;
 
-s3copy.copyDirectory(srcDir, s3Bucket, destPath, function (err) {
+console.log('verbose:', verbose);
+s3copy.copyDirectory(srcDir, s3Bucket, destPath, verbose, function (err) {
   if (err) {
     console.error('Error copying from', srcDir, 'to', destPath, '-', err);
     process.exit(1);
