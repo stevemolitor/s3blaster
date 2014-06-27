@@ -17,7 +17,6 @@ var s3Bucket = args[1];
 var destPath = args[2];
 var verbose = argv.v;
 
-console.log('verbose:', verbose);
 s3copy.copyDirectory(srcDir, s3Bucket, destPath, verbose, function (err) {
   if (err) {
     console.error('Error copying from', srcDir, 'to', destPath, '-', err);
