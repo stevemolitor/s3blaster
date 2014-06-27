@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+var s3copy = require('../lib/s3copy');
+
+if (process.argv.length !== 5) {
+  console.log('USAGE: s3copy [SRC_DIR] [S3_BUCKET] [S3_DEST_PATH]');
+  process.exit(1);
+}
+
+var srcDir = process.argv[2];
+var s3Bucket = process.argv[3]
+var destPath = process.argv[4];
+
+s3copy.copyDirectory(srcDir, s3Bucket, destPath, function (err) {
+  if (err) {
+    console.error('Error copying from', srcDir, 'to', destPath, '-', err);
+    process.exit(1);
+  }
+  console.log('Copied from', srcDir, 'to', destPath, 'successfully');
+});
