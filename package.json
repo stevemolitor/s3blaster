@@ -1,10 +1,10 @@
 {
-  "name": "s3copy",
-  "description": "Copy files to S3",
+  "name": "s3blaster",
+  "description": "Blast files into S3",
   "version": "0.0.1",
-  "main": "./lib/s3copy",
+  "main": "./lib/s3blaster",
   "bin": {
-    "s3copy": "./bin/s3copy"
+    "s3blaster": "./bin/s3blaster"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha test"
