@@ -1,27 +1,67 @@
 #!/usr/bin/env node
 
 var s3blaster = require('../lib/s3blaster');
-var minimist = require('minimist');
 
-var argv = minimist(process.argv.slice(2));
-var args = argv._;
+var yargs = require('yargs')
+    .usage(USAGE)
+    .describe('h', 'display this help message')
+    .alias('h', 'help')
+    .describe('v', 'verbose mode')
+    .alias('v', 'verbose')
+    .describe('d', 'print log messages but do not actually put or get from S3')
+    .alias('d', 'dry-run')
+    .example(
+      's3blaster -v PUT folder s3bucket s3folder',
+      'Recursively put all files and folders in local folder to s3bucket in s3folder, in verbose mode.')
+    .check(validateArgs);
 
-if (args.length !== 3) {
-  console.log('USAGE: s3blaster [SRC_DIR] [S3_BUCKET] [S3_DEST_PATH] {OPTIONS}');
-  console.log('OPTIONS include -v for verbose');
-  process.exit(1);
+var USAGE =
+    's3blaster [options] OPERATION [parameters]\n' +
+    '\n' +
+    'OPERATIONS:\n' +
+    '\tPUT LOCAL_FOLDER BUCKET [DESTINATION_FOLDER]: Recursively put local files and directories into S3.      DESTINATION_FOLDER is optional.';
+
+function validateArgs(argv, opts) {
+  var op = argv._[0];
+  var validOpts = ['PUT'];
+
+  if (!argv.h && !op) {
+    throw 'OPERATION is required';
+  }
+  if (validOpts.indexOf(op) === -1) {
+    throw "Invalid operation '" + op + "'. Valid operations are " + validOpts.join(', ');
+  }
+  if (op === 'PUT' && argv.length < 3) {
+    throw 'PUT operation requires LOCAL_FOLDER and BUCKET parameters';
+  }
 }
 
-var srcDir = args[0];
-var s3Bucket = args[1];
-var destPath = args[2];
-var verbose = argv.v || false;
+var argv = yargs.argv;
 
-debugger;
-s3blaster.copyDirectory(srcDir, s3Bucket, destPath, verbose, function (err) {
-  if (err) {
-    console.error('Error copying from', srcDir, 'to', destPath, '-', err);
-    process.exit(1);
-  }
-  console.log('Copied from', srcDir, 'to', destPath, 'successfully');
-});
+if (argv.h) {
+  yargs.showHelp();
+  process.exit(0);
+}
+
+if (argv.d) {
+  argv.v = true; // always be verbose in dry run mode
+}
+
+var op = argv._[0];
+
+if (op === 'PUT') {
+  var srcDir = argv._[1];
+  var s3Bucket = argv._[2];
+  var destPath = argv._[3];
+
+  s3blaster.put(srcDir, s3Bucket, destPath, argv.v, argv.d, function (err) {
+    if (err) {
+      console.error('Error putting from', srcDir, 'to', destPath, '-', err);
+      process.exit(1);
+    }
+    console.log('Copied from', srcDir, 'to', destPath, 'successfully');
+    if (argv.d) {
+      console.log("(dry run mode - didn't really upload)");
+    }
+  });
+}

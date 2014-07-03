@@ -2,6 +2,10 @@
   "name": "s3blaster",
   "description": "Blast files into S3",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stevemolitor/s3blaster"
+  },
   "main": "./lib/s3blaster",
   "bin": {
     "s3blaster": "./bin/s3blaster"
@@ -10,13 +14,12 @@
     "test": "./node_modules/.bin/mocha test"
   },
   "dependencies": {
-    "aws-sdk": "~2.0.3",
     "async": "~0.9.0",
-    "minimist": "~0.2.0"
+    "aws-sdk": "~2.0.3",
+    "yargs": "^1.2.6"
   },
   "devDependencies": {
     "mocha": "~1.20.1",
-    "chai": "~1.9.1",
-    "rimraf": "~2.2.8"
+    "chai": "~1.9.1"
   }
 }
