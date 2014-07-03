@@ -4,7 +4,9 @@ Blast files in and out of S3
 
 ## Usage
 
+```
 s3blaster [options] OPERATION [parameters]
+```
 
 ### OPERATIONS
  - PUT
