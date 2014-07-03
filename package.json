@@ -16,6 +16,7 @@
   "dependencies": {
     "async": "~0.9.0",
     "aws-sdk": "~2.0.3",
+    "mime": "^1.2.11",
     "yargs": "^1.2.6"
   },
   "devDependencies": {

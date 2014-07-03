@@ -2,24 +2,11 @@
 
 var s3blaster = require('../lib/s3blaster');
 
-var yargs = require('yargs')
-    .usage(USAGE)
-    .describe('h', 'display this help message')
-    .alias('h', 'help')
-    .describe('v', 'verbose mode')
-    .alias('v', 'verbose')
-    .describe('d', 'print log messages but do not actually put or get from S3')
-    .alias('d', 'dry-run')
-    .example(
-      's3blaster -v PUT folder s3bucket s3folder',
-      'Recursively put all files and folders in local folder to s3bucket in s3folder, in verbose mode.')
-    .check(validateArgs);
-
 var USAGE =
-    's3blaster [options] OPERATION [parameters]\n' +
+    's3blaster OPERATION [parameters] [options]\n' +
     '\n' +
-    'OPERATIONS:\n' +
-    '\tPUT LOCAL_FOLDER BUCKET [DESTINATION_FOLDER]: Recursively put local files and directories into S3.      DESTINATION_FOLDER is optional.';
+    'Operations:\n' +
+    '  PUT {local folder} {bucket} [destination folder]: recursively put local files and directories into S3. Destination folder is optional.';
 
 function validateArgs(argv, opts) {
   var op = argv._[0];
@@ -35,6 +22,22 @@ function validateArgs(argv, opts) {
     throw 'PUT operation requires LOCAL_FOLDER and BUCKET parameters';
   }
 }
+
+var yargs = require('yargs')
+    .usage(USAGE)
+    .boolean('h')
+    .describe('h', 'display this help message')
+    .alias('h', 'help')
+    .boolean('v')
+    .describe('v', 'verbose mode')
+    .alias('v', 'verbose')
+    .boolean('d')
+    .describe('d', 'print log messages but do not actually put or get from S3')
+    .alias('d', 'dryrun')
+    .example(
+      's3blaster -v PUT folder s3bucket s3folder',
+      'Recursively put all files and folders in local folder to s3bucket in s3folder, in verbose mode.')
+    .check(validateArgs);
 
 var argv = yargs.argv;
 

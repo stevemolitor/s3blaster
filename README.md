@@ -4,28 +4,29 @@ Blast files in and out of S3
 
 ## Usage
 
-```
+```shell
 s3blaster [options] OPERATION [parameters]
 ```
 
-### OPERATIONS
- - PUT
+## Operations
 
-```
-s3blaster PUT LOCAL_FOLDER BUCKET [DESTINATION_FOLDER]
-```
+- PUT
 
-Recursively put local files and directories into S3. DESTINATION_FOLDER is optional
+```PUT {local folder} {bucket} [destination folder]```
 
-### Examples
+Recursively put local files and directories into S3. Destination folder is optional.
+
+## Examples
+
 ```shell
 s3blaster -v PUT folder s3bucket s3folder
 ```
+
 Recursively put all files and folders in local folder to s3bucket in s3folder, in verbose mode.
 
+## Options
 ```
-Options:
-  -h, --help     display help message
+  -h, --help     display this help message
   -v, --verbose  verbose mode
-  -d, --dry-run  print log messages but do not actually put or get from S3
+  -d, --dryrun   print log messages but do not actually put or get from S3
 ```

@@ -31,6 +31,11 @@ describe('s3blaster', function () {
         return a.absolutePath.localeCompare(b.absolutePath);
       });
 
+      // we don't care about the guids, etc. in this test
+      actualFiles.forEach(function (entry) {
+        delete entry.stat;
+      });
+
       var expectedFiles = [
         {
           absolutePath: '/Users/molitors/s3blaster/test/test-content/file1-link-link.txt',
