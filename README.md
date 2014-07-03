@@ -1,11 +1,14 @@
-# s3blaster Blast files in and out of S3
+# s3blaster
+
+Blast files in and out of S3
 
 ## Usage
 
 s3blaster [options] OPERATION [parameters]
 
 ### OPERATIONS
- - PUT LOCAL_FOLDER BUCKET [DESTINATION_FOLDER]: Recursively put local files and directories into S3. DESTINATION_FOLDER is optional
+ - PUT
+  PUT LOCAL_FOLDER BUCKET [DESTINATION_FOLDER]: Recursively put local files and directories into S3. DESTINATION_FOLDER is optional
 
 ### Examples
 ```shell
