@@ -23,7 +23,7 @@ Recursively put all files and folders in local folder to s3bucket in s3folder, i
 
 ```
 Options:
-  -h, --help     display this help message
+  -h, --help     display help message
   -v, --verbose  verbose mode
   -d, --dry-run  print log messages but do not actually put or get from S3
 ```
