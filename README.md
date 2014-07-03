@@ -8,7 +8,12 @@ s3blaster [options] OPERATION [parameters]
 
 ### OPERATIONS
  - PUT
-  PUT LOCAL_FOLDER BUCKET [DESTINATION_FOLDER]: Recursively put local files and directories into S3. DESTINATION_FOLDER is optional
+
+```
+s3blaster PUT LOCAL_FOLDER BUCKET [DESTINATION_FOLDER]
+```
+
+Recursively put local files and directories into S3. DESTINATION_FOLDER is optional
 
 ### Examples
 ```shell
