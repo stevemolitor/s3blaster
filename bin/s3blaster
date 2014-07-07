@@ -22,7 +22,6 @@ function validateArgs(argv, opts) {
   if (op === 'PUT' && argv._.length < 3) {
     throw 'PUT operation requires folder and s3bucket parameters';
   }
-  console.log('op:', op, 'argv.length', argv._.length);
   if (op === 'GET' && argv._.length < 3) {
     throw 'GET operation requires s3bucket and s3key parameters';
   }
