@@ -36,6 +36,12 @@ s3bucket GET s3bucket s3folder ./local_folder
 
 Recursively get contents of ```s3folder``` from ```s3bucket```, and place in local directory ```./local_folder```.
 
+```shell
+s3blaster LIST s3bucket folder1/folder2
+```
+
+List top level objects starting with prefix 'folder1/folder2'.
+
 ## Options
 ```
   -h, --help     display this help message
