@@ -7,11 +7,12 @@ var USAGE =
     '\n' +
     'Operations:\n' +
     '  PUT {local folder} {bucket} [destination folder]: recursively put local files and directories into S3. Destination folder is optional.\n' +
-    '  GET {s3bucket} {s3key} [local folder]: recursively get folder and/or file from S3 and place in destination folder (defaults to current directory).';
+    '  GET {s3bucket} {s3key} [local folder]: recursively get folder and/or file from S3 and place in destination folder (defaults to current directory).\n' +
+    '  LIST {s3bucket} [prefix]: List objects in S3 bucket starting with prefix, or all objects if no prefix.'
 
 function validateArgs(argv, opts) {
   var op = argv._[0];
-  var validOpts = ['PUT', 'GET'];
+  var validOpts = ['PUT', 'GET', 'LIST'];
 
   if (!argv.h && !op) {
     throw 'OPERATION is required';
@@ -25,19 +26,22 @@ function validateArgs(argv, opts) {
   if (op === 'GET' && argv._.length < 3) {
     throw 'GET operation requires s3bucket and s3key parameters';
   }
+  if (op === 'LIST' && argv._.length < 2) {
+    throw 'LIST operation requires s3bucket parameter'
+  }
 }
 
 var yargs = require('yargs')
     .usage(USAGE)
-    .boolean('h')
-    .describe('h', 'display this help message')
-    .alias('h', 'help')
-    .boolean('v')
-    .describe('v', 'verbose mode')
-    .alias('v', 'verbose')
-    .boolean('d')
-    .describe('d', 'print log messages but do not actually put or get from S3')
-    .alias('d', 'dryrun')
+    .boolean('help')
+    .describe('help', 'display this help message')
+    .alias('help', 'h')
+    .boolean('verbose')
+    .describe('verbose', 'verbose mode')
+    .alias('verbose', 'v')
+    .boolean('dryrun')
+    .describe('dryrun', 'print log messages but do not actually put or get from S3')
+    .alias('dryrun', 'd')
     .example(
       's3blaster -v PUT folder s3bucket s3folder',
       'Recursively put all files and folders in local folder to s3bucket in s3folder, in verbose mode.')
@@ -61,7 +65,7 @@ if (op === 'PUT') {
   var s3Bucket = argv._[2];
   var destPath = argv._[3] || '.';
 
-  s3blaster.put(srcDir, s3Bucket, destPath, argv.v, argv.d, function (err) {
+  s3blaster.put(srcDir, s3Bucket, destPath, argv, function (err) {
     if (err) {
       console.error('Error putting from', srcDir, 'to', destPath, '-', err);
       process.exit(1);
@@ -76,7 +80,7 @@ if (op === 'PUT') {
   var s3Key = argv._[2];
   var localPath =  argv._[3] || '.';
 
-  s3blaster.get(s3Bucket, s3Key, localPath, argv.v, argv.d, function (err) {
+  s3blaster.get(s3Bucket, s3Key, localPath, argv, function (err) {
     if (err) {
       console.error('Error getting from bucket', s3Bucket, '-', s3Key, '-', err);
       process.exit(1);
@@ -85,5 +89,13 @@ if (op === 'PUT') {
     if (argv.d) {
       console.log("(dry run mode - didn't really upload)");
     }
+    process.exit(0);
+  });
+} else if (op === 'LIST') {
+  var s3Bucket = argv._[1];
+  var prefix = argv._[2];
+
+  s3blaster.list(s3Bucket, prefix, argv, function (err, results) {
+    process.exit(0);
   });
 }

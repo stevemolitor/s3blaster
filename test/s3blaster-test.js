@@ -23,8 +23,8 @@ describe('s3blaster', function () {
     process.chdir(originalDir);
   });
 
-  it('should list files', function (done) {
-    s3blaster.list('test-content', function (err, files) {
+  it('should list local files', function (done) {
+    s3blaster.listLocal('test-content', function (err, files) {
       expect(err).to.not.exist;
 
       var actualFiles = files.sort(function (a, b) {
