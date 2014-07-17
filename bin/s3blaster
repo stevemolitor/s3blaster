@@ -6,13 +6,18 @@ var USAGE =
     's3blaster OPERATION [parameters] [options]\n' +
     '\n' +
     'Operations:\n' +
-    '  PUT {local folder} {bucket} [destination folder]: recursively put local files and directories into S3. Destination folder is optional.\n' +
-    '  GET {s3bucket} {s3key} [local folder]: recursively get folder and/or file from S3 and place in destination folder (defaults to current directory).\n' +
-    '  LIST {s3bucket} [prefix]: List objects in S3 bucket starting with prefix, or all objects if no prefix.'
+    '  PUT {local folder} {bucket} [destination folder]:\n' +
+    '    recursively put local files and directories into S3. Destination folder is optional.\n' +
+    '  GET {s3bucket} {s3key} [local folder]:\n' +
+    '    recursively get folder and/or file from S3 and place in destination folder (defaults to current directory).\n' +
+    '  LIST {s3bucket} [prefix]:\n' +
+    '    List objects in S3 bucket starting with prefix, or all objects if no prefix.\n' +
+    '  DELETE {s3bucket} [prefix]:\n' +
+    '    Delete all objects in S3 bucket starting with prefix, or all objects if no prefix.\n';
 
 function validateArgs(argv, opts) {
   var op = argv._[0];
-  var validOpts = ['PUT', 'GET', 'LIST'];
+  var validOpts = ['PUT', 'GET', 'LIST', 'DELETE'];
 
   if (!argv.h && !op) {
     throw 'OPERATION is required';
@@ -26,8 +31,8 @@ function validateArgs(argv, opts) {
   if (op === 'GET' && argv._.length < 3) {
     throw 'GET operation requires s3bucket and s3key parameters';
   }
-  if (op === 'LIST' && argv._.length < 2) {
-    throw 'LIST operation requires s3bucket parameter'
+  if ((op === 'LIST' || op === 'DELETE') && argv._.length < 2) {
+    throw (op + ' operation requires s3bucket parameter');
   }
 }
 
@@ -52,6 +57,9 @@ var yargs = require('yargs')
     .example(
       's3blaster LIST s3bucket folder1/folder2',
       "List top level objects starting with prefix 'folder1/folder2'.")
+    .example(
+      's3blaster DELETE s3bucket folder1/folder2',
+      "Delete all objects starting with prefix folder1/folder2.")
     .check(validateArgs);
 
 var argv = yargs.argv;
@@ -81,6 +89,7 @@ if (op === 'PUT') {
     if (argv.d) {
       console.log("(dry run mode - didn't really upload)");
     }
+    process.exit(0);
   });
 } else if (op === 'GET') {
   var s3Bucket = argv._[1];
@@ -107,6 +116,18 @@ if (op === 'PUT') {
       console.error('Error listing bucket', s3Bucket, '-', prefix, '-', err);
       process.exit(1);
     }
+    process.exit(0);
+  });
+} else if (op === 'DELETE') {
+  var s3Bucket = argv._[1];
+  var prefix = argv._[2];
+
+  s3blaster.del(s3Bucket, prefix, argv, function (err, deleted) {
+    if (err) {
+      console.error('Error deleting from bucket', s3Bucket, '-', prefix, '-', err);
+      process.exit(1);
+    }
+    console.log('Deleted', deleted, 'objects from', s3Bucket, '-', prefix);
     process.exit(0);
   });
 }
