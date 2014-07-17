@@ -12,15 +12,27 @@ s3blaster [options] OPERATION [parameters]
 
 - PUT
 
-```PUT {local folder} {bucket} [destination folder]```
+```PUT {local folder} {s3bucket} [destination folder]```
 
 Recursively put local files and directories into S3. Destination folder is optional.
 
 - GET
 
-```GET {bucket} {S3 key} [destination folder}```
+```GET {s3bucket} {S3 key} [destination folder}```
 
 Recursively get folder and/or file from S3 and place in destination folder (defaults to current directory).
+
+- LIST
+
+```LIST {s3bucket} [prefix]```
+
+List objects in S3 bucket starting with prefix, or all objects if no prefix.
+
+- DELETE
+
+```DELETE {s3bucket} [prefix]```
+
+Delete all objects in S3 bucket starting with prefix, or all objects if no prefix.
 
 ## Examples
 
@@ -41,6 +53,12 @@ s3blaster LIST s3bucket folder1/folder2
 ```
 
 List top level objects starting with prefix 'folder1/folder2'.
+
+```shell
+3blaster DELETE s3bucket folder1/folder2
+```
+
+Delete all objects starting with prefix folder1/folder2.
 
 ## Options
 ```
