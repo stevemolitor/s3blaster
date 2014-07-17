@@ -8,6 +8,9 @@ Blast files in and out of S3
 s3blaster [options] OPERATION [parameters]
 ```
 
+You have to set the ```AWS_ACCESS_KEY_ID``` and ```AWS_SECRET_ACCESS_KEY``` environment variables
+first, to provide the AWS credentials.
+
 ## Operations
 
 - PUT
