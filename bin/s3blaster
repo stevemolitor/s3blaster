@@ -1,66 +1,49 @@
 #!/usr/bin/env node
 
 var s3blaster = require('../lib/s3blaster');
+var yargs = require('yargs');
+var usage = require('../usage');
 
-var USAGE =
-    's3blaster OPERATION [parameters] [options]\n' +
-    '\n' +
-    'Operations:\n' +
-    '  PUT {local folder} {bucket} [destination folder]:\n' +
-    '    recursively put local files and directories into S3. Destination folder is optional.\n' +
-    '  GET {s3bucket} {s3key} [local folder]:\n' +
-    '    recursively get folder and/or file from S3 and place in destination folder (defaults to current directory).\n' +
-    '  LIST {s3bucket} [prefix]:\n' +
-    '    List objects in S3 bucket starting with prefix, or all objects if no prefix.\n' +
-    '  DELETE {s3bucket} [prefix]:\n' +
-    '    Delete all objects in S3 bucket starting with prefix, or all objects if no prefix.\n';
+function describeOperation(op) {
+  return '  ' + op + ' ' +
+    usage.operations[op].required.join(' ') + ' ' +
+    usage.operations[op].optional.map(function (arg) {
+      return '[' + arg + ']'
+    }).join(' ') +
+    '\n    ' + usage.operations[op].description;
+}
+
+function operationsUsage() {
+  return Object.keys(usage.operations).map(function (op) {
+    return describeOperation(op);
+  }).join('\n') + '\n';
+}
+
+var usageMsg = 'Usage: ' + usage.synopsis + '\n\nOperations:\n\n' + operationsUsage();
 
 function validateArgs(argv, opts) {
   var op = argv._[0];
-  var validOpts = ['PUT', 'GET', 'LIST', 'DELETE'];
 
   if (!argv.h && !op) {
     throw 'OPERATION is required';
   }
-  if (!argv.h && validOpts.indexOf(op) === -1) {
-    throw "Invalid operation '" + op + "'. Valid operations are " + validOpts.join(', ');
-  }
-  if (op === 'PUT' && argv._.length < 3) {
-    throw 'PUT operation requires folder and s3bucket parameters';
-  }
-  if (op === 'GET' && argv._.length < 3) {
-    throw 'GET operation requires s3bucket and s3key parameters';
-  }
-  if ((op === 'LIST' || op === 'DELETE') && argv._.length < 2) {
-    throw (op + ' operation requires s3bucket parameter');
+
+  var opCfg = usage.operations[op];
+  if (argv._.length <= opCfg.required.length) {
+    throw (op + ' operation requires ' + opCfg.required.join(', ') + ' parameters');
   }
 }
 
-var yargs = require('yargs')
-    .usage(USAGE)
-    .boolean('help')
-    .describe('help', 'display this help message')
-    .alias('help', 'h')
-    .boolean('verbose')
-    .describe('verbose', 'verbose mode')
-    .alias('verbose', 'v')
-    .boolean('dryrun')
-    .describe('dryrun', 'print log messages but do not actually put or get from S3')
-    .alias('dryrun', 'd')
-    .example(
-      's3blaster -v PUT folder s3bucket s3folder',
-      'Recursively put all files and folders in local folder to s3bucket in s3folder, in verbose mode.')
-    .example(
-      's3blaster GET s3bucket s3folder',
-      'Recursively get all files and folders in s3bucket / s3folder.'
-    )
-    .example(
-      's3blaster LIST s3bucket folder1/folder2',
-      "List top level objects starting with prefix 'folder1/folder2'.")
-    .example(
-      's3blaster DELETE s3bucket folder1/folder2',
-      "Delete all objects starting with prefix folder1/folder2.")
-    .check(validateArgs);
+yargs
+  .usage(usageMsg)
+  .options(usage.options);
+
+usage.examples.forEach(function (example) {
+  yargs = yargs.example.apply(yargs, example);
+});
+
+yargs = yargs.check(validateArgs);
+
 
 var argv = yargs.argv;
 
