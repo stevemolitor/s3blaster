@@ -6,9 +6,10 @@ var usage = require('../lib/usage');
 
 // validates command line arguments
 function validateArgs(argv, opts) {
-  var op = argv._[0];
+  if (argv.help) return;
 
-  if (!argv.h && !op) {
+  var op = argv._[0];
+  if (!op) {
     throw 'OPERATION is required';
   }
 
@@ -32,10 +33,10 @@ var operationsUsage = Object.keys(usage.operations).map(function (op) {
   return describeOperation(op);
 }).join('\n') + '\n';
 
-var usageMsg = 'Usage: ' + usage.synopsis + '\n\nOperations:\n\n' + operationsUsage;
+var usageMsg = 'Usage: ' + usage.synopsis + '\n\n\nOperations:\n' + operationsUsage;
 
 // setup yargs
-yargs
+yargs = yargs
   .usage(usageMsg)
   .options(usage.options)
   .check(validateArgs);
@@ -54,6 +55,7 @@ if (argv.h) {
 
 // switch on operation and run s3blaster
 var op = argv._[0];
+
 if (op === 'PUT') {
   var srcDir = argv._[1];
   var s3Bucket = argv._[2];
