@@ -8,7 +8,7 @@ var expect = chai.expect;
 var fs = require('fs');
 var path = require('path');
 var rimraf = require('rimraf');
-var s3blaster = require('../lib/s3blaster');
+var local = require('../lib/local');
 
 chai.config.includeStack = true;
 
@@ -24,7 +24,7 @@ describe('s3blaster', function () {
   });
 
   it('should list local files', function (done) {
-    s3blaster.listLocal('test-content', function (err, files) {
+    local.list('test-content', function (err, files) {
       expect(err).to.not.exist;
 
       var actualFiles = files.sort(function (a, b) {
