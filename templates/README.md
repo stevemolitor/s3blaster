@@ -20,7 +20,7 @@ Blast files in and out of S3
 
 ## Examples
 <% _.forEach(usage.examples, function (ex) { %>
-### ```<%= ex[0] %>```
+```<%= ex[0] %>```
 
 <%= ex[1] %>
 <% }); %>
