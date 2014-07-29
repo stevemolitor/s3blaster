@@ -35,15 +35,19 @@ Delete all objects in S3 bucket starting with prefix, or all objects if no prefi
 ## Examples
 
 ```s3blaster -v PUT folder bucket key```
+
 Recursively put all files and folders in local folder to s3 bucket / key, in verbose mode.
 
 ```s3blaster GET bucket key folder```
+
 Recursively get all files and folders from S3 starting with key saving to local folder.
 
 ```s3blaster LIST bucket folder1/folder2```
+
 List top level objects starting with prefix 'folder1/folder2'.
 
 ```s3blaster DELETE bucket folder1/folder2```
+
 Delete all objects starting with prefix 'folder1/folder2'.
 
 
