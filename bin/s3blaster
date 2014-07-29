@@ -65,9 +65,6 @@ if (op === 'PUT') {
       process.exit(1);
     }
     console.log('Copied from', srcDir, 'to', destPath, 'successfully');
-    if (argv.d) {
-      console.log("(dry run mode - didn't really upload)");
-    }
     process.exit(0);
   });
 } else if (op === 'GET') {
@@ -81,9 +78,6 @@ if (op === 'PUT') {
       process.exit(1);
     }
     console.log('Fetched from', s3Bucket, '-', s3Key, 'to', localPath, 'successfully');
-    if (argv.d) {
-      console.log("(dry run mode - didn't really upload)");
-    }
     process.exit(0);
   });
 } else if (op === 'LIST') {
