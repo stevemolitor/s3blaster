@@ -12,7 +12,9 @@ Blast files in and out of S3
 <% _.forIn(usage.operations, function (cfg, op) { %>
 <% var args = cfg.required.join(' ') + ' ' + cfg.optional.join(' '); %>
 * <%= op %>
+
 ```<%= op %> <%= args %>```
+
 <%= cfg.description %>
 <% }); %>
 
@@ -25,6 +27,6 @@ Blast files in and out of S3
 
 ### Options
 <% _.forIn(usage.options, function (op, short) { %>
-```--<%= short %>, --<%= op.alias %>```
+* ```--<%= short %>, --<%= op.alias %>```
 <%= op.describe %>
 <% }); %>
