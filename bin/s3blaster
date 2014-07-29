@@ -33,7 +33,7 @@ var operationsUsage = Object.keys(usage.operations).map(function (op) {
   return describeOperation(op);
 }).join('\n') + '\n';
 
-var usageMsg = 'Usage: ' + usage.synopsis + '\n\n\nOperations:\n' + operationsUsage;
+var usageMsg = 'Usage: ' + usage.synopsis + '\n\n' + usage.description + '\n\n\nOperations:\n' + operationsUsage;
 
 // setup yargs
 yargs = yargs

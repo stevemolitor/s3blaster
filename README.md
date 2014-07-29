@@ -4,68 +4,54 @@ Blast files in and out of S3
 
 ## Usage
 
-```shell
-s3blaster [options] OPERATION [parameters]
-```
+```s3blaster OPERATION parameters [options]```
 
-You have to set the ```AWS_ACCESS_KEY_ID``` and ```AWS_SECRET_ACCESS_KEY``` environment variables
-first, to provide the AWS credentials.
+Set the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables
+before running, to provide the AWS credentials.
 
 ## Operations
 
-- PUT
 
-```PUT {local folder} {s3bucket} [destination folder]```
+* PUT
+```PUT local_folder bucket key```
+recursively put local files and directories into S3 at key (folder or file).
 
-Recursively put local files and directories into S3. Destination folder is optional.
 
-- GET
+* GET
+```GET bucket key local_folder```
+recursively get folder and/or file from S3 and place in destination folder (defaults to current directory).
 
-```GET {s3bucket} {S3 key} [destination folder}```
 
-Recursively get folder and/or file from S3 and place in destination folder (defaults to current directory).
-
-- LIST
-
-```LIST {s3bucket} [prefix]```
-
+* LIST
+```LIST bucket prefix```
 List objects in S3 bucket starting with prefix, or all objects if no prefix.
 
-- DELETE
 
-```DELETE {s3bucket} [prefix]```
-
+* DELETE
+```DELETE bucket prefix```
 Delete all objects in S3 bucket starting with prefix, or all objects if no prefix.
+
 
 ## Examples
 
-```shell
-s3blaster -v PUT folder s3bucket s3folder
-```
+```s3blaster -v PUT folder bucket key```
+Recursively put all files and folders in local folder to s3 bucket / key, in verbose mode.
 
-Recursively put all files and folders in ```./local_folder``` to ```s3bucket``` in ```s3folder```, in verbose mode.
+```s3blaster GET bucket key folder```
+Recursively get all files and folders from S3 starting with key saving to local folder.
 
-```shell
-s3bucket GET s3bucket s3folder ./local_folder
-```
-
-Recursively get contents of ```s3folder``` from ```s3bucket```, and place in local directory ```./local_folder```.
-
-```shell
-s3blaster LIST s3bucket folder1/folder2
-```
-
+```s3blaster LIST bucket folder1/folder2```
 List top level objects starting with prefix 'folder1/folder2'.
 
-```shell
-3blaster DELETE s3bucket folder1/folder2
-```
+```s3blaster DELETE bucket folder1/folder2```
+Delete all objects starting with prefix 'folder1/folder2'.
 
-Delete all objects starting with prefix folder1/folder2.
 
-## Options
-```
-  -h, --help     display this help message
-  -v, --verbose  verbose mode
-  -d, --dryrun   print log messages but do not actually put or get from S3
-```
+### Options
+
+```--h, --help```
+display this help message
+
+```--v, --verbose```
+verbose mode
+
