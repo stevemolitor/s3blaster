@@ -2,7 +2,7 @@
 
 var s3blaster = require('../lib/s3blaster');
 var yargs = require('yargs');
-var usage = require('../usage');
+var usage = require('../lib/usage');
 
 // validates command line arguments
 function validateArgs(argv, opts) {
