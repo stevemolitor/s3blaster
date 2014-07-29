@@ -1,6 +1,6 @@
 # s3blaster
 
-Blast files in and out of S3
+YO Blast files in and out of S3
 
 ## Usage
 
