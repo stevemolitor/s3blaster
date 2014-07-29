@@ -4,23 +4,7 @@ var s3blaster = require('../lib/s3blaster');
 var yargs = require('yargs');
 var usage = require('../usage');
 
-function describeOperation(op) {
-  return '  ' + op + ' ' +
-    usage.operations[op].required.join(' ') + ' ' +
-    usage.operations[op].optional.map(function (arg) {
-      return '[' + arg + ']'
-    }).join(' ') +
-    '\n    ' + usage.operations[op].description;
-}
-
-function operationsUsage() {
-  return Object.keys(usage.operations).map(function (op) {
-    return describeOperation(op);
-  }).join('\n') + '\n';
-}
-
-var usageMsg = 'Usage: ' + usage.synopsis + '\n\nOperations:\n\n' + operationsUsage();
-
+// validates command line arguments
 function validateArgs(argv, opts) {
   var op = argv._[0];
 
@@ -34,30 +18,42 @@ function validateArgs(argv, opts) {
   }
 }
 
+// setup usage messages
+function describeOperation(op) {
+  return '  ' + op + ' ' +
+    usage.operations[op].required.join(' ') + ' ' +
+    usage.operations[op].optional.map(function (arg) {
+      return '[' + arg + ']'
+    }).join(' ') +
+    '\n    ' + usage.operations[op].description;
+}
+
+var operationsUsage = Object.keys(usage.operations).map(function (op) {
+  return describeOperation(op);
+}).join('\n') + '\n';
+
+var usageMsg = 'Usage: ' + usage.synopsis + '\n\nOperations:\n\n' + operationsUsage;
+
+// setup yargs
 yargs
   .usage(usageMsg)
-  .options(usage.options);
+  .options(usage.options)
+  .check(validateArgs);
 
 usage.examples.forEach(function (example) {
   yargs = yargs.example.apply(yargs, example);
 });
 
-yargs = yargs.check(validateArgs);
-
-
 var argv = yargs.argv;
 
+// check for help option
 if (argv.h) {
   yargs.showHelp();
   process.exit(0);
 }
 
-if (argv.d) {
-  argv.v = true; // always be verbose in dry run mode
-}
-
+// switch on operation and run s3blaster
 var op = argv._[0];
-
 if (op === 'PUT') {
   var srcDir = argv._[1];
   var s3Bucket = argv._[2];
