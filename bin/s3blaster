@@ -67,7 +67,7 @@ if (op === 'PUT') {
       console.error('Error putting from', srcDir, 'to', destPath, '-', err);
       process.exit(1);
     }
-    console.log('Copied from', srcDir, 'to', destPath, 'successfully');
+    console.log('Put from', srcDir, 'to', destPath, 'successfully');
     process.exit(0);
   });
 } else if (op === 'GET') {
@@ -94,7 +94,6 @@ if (op === 'PUT') {
   });
 
   stream.on('end', process.exit);
-
   stream.pipe(listStream()).pipe(process.stdout);
 } else if (op === 'DELETE') {
   var s3Bucket = argv._[1];
@@ -106,6 +105,19 @@ if (op === 'PUT') {
       process.exit(1);
     }
     console.log('Deleted', deleted, 'objects from', s3Bucket, '-', prefix);
+    process.exit(0);
+  });
+} else if (op === 'COPY') {
+  var s3Bucket = argv._[1];
+  var prefix = argv._[2];
+  var destination = argv._[3];
+
+  s3blaster.copy(s3Bucket, prefix, destination, argv, function (err, copied) {
+    if (err) {
+      console.error('Error copying from bucket', s3Bucket, '-', prefix, '-', err);
+      process.exit(1);
+    }
+    console.log('Copied', copied, 'objects from', s3Bucket, '-', prefix, 'to', destination);
     process.exit(0);
   });
 }
