@@ -19,14 +19,14 @@ describe('s3blaster', function () {
   var LOCAL_FOLDER = path.resolve(__dirname, 'test-content');
 
   beforeEach(function (done) {
-    s3blaster.del(BUCKET, function (err) {
-      expect(err).to.not.exist;
-      s3blaster.put(LOCAL_FOLDER, BUCKET, done);
-    });
+   s3blaster.del(BUCKET, function (err) {
+     expect(err).to.not.exist;
+      s3blaster.put(LOCAL_FOLDER, BUCKET, 'test-content', done);
+   });
   });
 
   it('should LIST directories', function (done) {
-    var stream = s3blaster.list(BUCKET);
+    var stream = s3blaster.list(BUCKET, 'test-content/');
 
     var results = [];
     stream.on('data', results.push.bind(results));
@@ -34,15 +34,17 @@ describe('s3blaster', function () {
 
     stream.on('end', function () {
       var names = _.pluck(results, 'name').sort();
-      var expectedNames =
-          ['file1-link-link.txt', 'file1-link.txt', 'file1.txt', 'file2.txt', 'file4-link.txt', 'folder/'];
+      var expectedNames = [
+        'test-content/file1-link-link.txt', 'test-content/file1-link.txt',
+        'test-content/file1.txt', 'test-content/file2.txt', 'test-content/file4-link.txt', 'test-content/folder/'
+      ];
       expect(names).to.deep.equal(expectedNames);
       done();
     });
   });
 
   it('should LIST single file', function (done) {
-    var stream = s3blaster.list(BUCKET, 'file1.txt');
+    var stream = s3blaster.list(BUCKET, 'test-content/file1.txt');
 
     var results = [];
     stream.on('data', results.push.bind(results));
@@ -50,10 +52,9 @@ describe('s3blaster', function () {
 
     stream.on('end', function () {
       var names = _.pluck(results, 'name').sort();
-      var expectedNames = ['file1.txt'];
+      var expectedNames = ['test-content/file1.txt'];
       expect(names).to.deep.equal(expectedNames);
       done();
     });
   });
-
 });
