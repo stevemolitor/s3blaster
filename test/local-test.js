@@ -5,14 +5,11 @@
 
 var chai = require('chai');
 var expect = chai.expect;
-var fs = require('fs');
-var path = require('path');
-var rimraf = require('rimraf');
 var local = require('../lib/local');
 
 chai.config.includeStack = true;
 
-describe('s3blaster', function () {
+describe('local', function () {
   var originalDir = process.cwd();
 
   beforeEach(function () {
