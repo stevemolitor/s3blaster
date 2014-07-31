@@ -40,6 +40,27 @@ List objects in S3 bucket starting with prefix, or all objects if no prefix.
 Delete all objects in S3 bucket starting with prefix, or all objects if no prefix.
 
 
+* COPY
+
+```COPY source-bucket source-prefix destination-bucket destination-prefix```
+
+Copy all objects in S3 in source bucket starting with prefix to destination bucket
+
+
+* FIX_LINKS
+
+```FIX_LINKS source-dir bucket ```
+
+Fix links in source directory to S3.
+
+
+* PUT_LATEST
+
+```PUT_LATEST source-dir bucket last-modified ```
+
+Put all files from source dir modifed after last-modified to S3.
+
+
 ## Examples
 
 ```s3blaster -v PUT folder bucket key```
@@ -57,6 +78,10 @@ List top level objects starting with prefix 'folder1/folder2'.
 ```s3blaster DELETE bucket folder1/folder2```
 
 Delete all objects starting with prefix 'folder1/folder2'.
+
+```s3blaster COPY staging-bucket folder/ prod-bucket```
+
+Recursively copy all files in staging-bucket/folder to prod-bucket.
 
 
 ### Options
