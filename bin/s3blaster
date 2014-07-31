@@ -108,21 +108,20 @@ if (op === 'PUT') {
     process.exit(0);
   });
 } else if (op === 'COPY') {
-  var s3Bucket = argv._[1];
-  var prefix = argv._[2];
-  var destination = argv._[3];
+  var srcBucket = argv._[1];
+  var srcPrefix = argv._[2];
+  var dstBucket = argv._[3];
+  var dstPrefix = argv._[4] || '';
 
-  s3blaster.copy(s3Bucket, prefix, destination, argv, function (err, copied) {
+  debugger;
+  s3blaster.copy(srcBucket, srcPrefix, dstBucket, dstPrefix, argv, function (err, copied) {
     if (err) {
-      console.error('Error copying from bucket', s3Bucket, '-', prefix, '-', err);
+      console.error('Error copying from bucket', srcBucket, '-', srcPrefix, '-', err);
       process.exit(1);
     }
-    console.log('Copied', copied, 'objects from', s3Bucket, '-', prefix, 'to', destination);
+    console.log('Copied', copied, 'objects from', srcBucket, '-', srcPrefix);
     process.exit(0);
   });
 } else if (op === 'FIX_LINKS') {
-  var srcDir = argv._[1];
-  var s3Bucket = argv._[2];
-
 
 }
