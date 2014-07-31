@@ -120,4 +120,9 @@ if (op === 'PUT') {
     console.log('Copied', copied, 'objects from', s3Bucket, '-', prefix, 'to', destination);
     process.exit(0);
   });
+} else if (op === 'FIX_LINKS') {
+  var srcDir = argv._[1];
+  var s3Bucket = argv._[2];
+
+
 }
