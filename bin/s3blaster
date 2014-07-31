@@ -4,6 +4,7 @@ var s3blaster = require('../lib/s3blaster');
 var yargs = require('yargs');
 var usage = require('../lib/usage');
 var listStream = require('../lib/list-stream');
+var moment = require('moment');
 
 // validates command line arguments
 function validateArgs(argv, opts) {
@@ -62,12 +63,12 @@ if (op === 'PUT') {
   var s3Bucket = argv._[2];
   var destPath = argv._[3] || '.';
 
-  s3blaster.put(srcDir, s3Bucket, destPath, argv, function (err) {
+  s3blaster.put(srcDir, s3Bucket, destPath, argv, function (err, copied) {
     if (err) {
       console.error('Error putting from', srcDir, 'to', destPath, '-', err);
       process.exit(1);
     }
-    console.log('Put from', srcDir, 'to', destPath, 'successfully');
+    console.log('Put', copied, 'files from', srcDir, 'to', s3Bucket, 'successfully');
     process.exit(0);
   });
 } else if (op === 'GET') {
@@ -132,6 +133,21 @@ if (op === 'PUT') {
     }
 
     console.log('Put', copied, 'links to', bucket);
+    process.exit(0);
+  });
+} else if (op === 'PUT_LATEST') {
+  var srcDir = argv._[1];
+  var bucket = argv._[2];
+  var lastModified = moment(argv._[3])._d;
+
+  console.log('Putting files modified since', lastModified.toISOString(), 'to', bucket, '...');
+  s3blaster.putLatest(srcDir, bucket, lastModified, argv, function (err, copied) {
+    if (err) {
+      console.error('Error copying files - ', err);
+      process.exit(1);
+    }
+
+    console.log('Put', copied, 'files to', bucket);
     process.exit(0);
   });
 }
