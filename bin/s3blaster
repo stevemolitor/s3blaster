@@ -113,7 +113,6 @@ if (op === 'PUT') {
   var dstBucket = argv._[3];
   var dstPrefix = argv._[4] || '';
 
-  debugger;
   s3blaster.copy(srcBucket, srcPrefix, dstBucket, dstPrefix, argv, function (err, copied) {
     if (err) {
       console.error('Error copying from bucket', srcBucket, '-', srcPrefix, '-', err);
@@ -122,6 +121,17 @@ if (op === 'PUT') {
     console.log('Copied', copied, 'objects from', srcBucket, '-', srcPrefix);
     process.exit(0);
   });
-} else if (op === 'FIX_LINKS') {
+} else if (op === 'PUT_LINKS') {
+  var srcDir = argv._[1];
+  var bucket = argv._[2];
 
+  s3blaster.putLinks(srcDir, bucket, argv, function (err, copied) {
+    if (err) {
+      console.error('Error fixing links - ', err);
+      process.exit(1);
+    }
+
+    console.log('Put', copied, 'links to', bucket);
+    process.exit(0);
+  });
 }

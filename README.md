@@ -47,9 +47,9 @@ Delete all objects in S3 bucket starting with prefix, or all objects if no prefi
 Copy all objects in S3 in source bucket starting with prefix to destination bucket
 
 
-* FIX_LINKS
+* PUT_LINKS
 
-```FIX_LINKS source-dir bucket ```
+```PUT_LINKS source-dir bucket ```
 
 Fix links in source directory to S3.
 

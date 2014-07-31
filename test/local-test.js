@@ -36,34 +36,34 @@ describe('local', function () {
       var expectedFiles = [
         {
           absolutePath: '/Users/molitors/s3blaster/test/test-content/file1-link-link.txt',
-          relativePath: 'file1-link-link.txt',
+          relativePath: 'test-content/file1-link-link.txt',
           linkPath: 'file1-link.txt'
         },
         {
           absolutePath: '/Users/molitors/s3blaster/test/test-content/file1-link.txt',
-          relativePath: 'file1-link.txt',
+          relativePath: 'test-content/file1-link.txt',
           linkPath: 'file1.txt'
         },
         {
           absolutePath: '/Users/molitors/s3blaster/test/test-content/file1.txt',
-          relativePath: 'file1.txt'
+          relativePath: 'test-content/file1.txt'
         },
         {
           absolutePath: '/Users/molitors/s3blaster/test/test-content/file2.txt',
-          relativePath: 'file2.txt'
+          relativePath: 'test-content/file2.txt'
         },
         {
           absolutePath: '/Users/molitors/s3blaster/test/test-content/file4-link.txt',
-          relativePath: 'file4-link.txt',
+          relativePath: 'test-content/file4-link.txt',
           linkPath: 'folder/subfolder/file4.txt'
         },
         {
           absolutePath: '/Users/molitors/s3blaster/test/test-content/folder/file3.txt',
-          relativePath: 'folder/file3.txt'
+          relativePath: 'test-content/folder/file3.txt'
         },
         {
           absolutePath: '/Users/molitors/s3blaster/test/test-content/folder/subfolder/file4.txt',
-          relativePath: 'folder/subfolder/file4.txt'
+          relativePath: 'test-content/folder/subfolder/file4.txt'
         }
       ];
 
