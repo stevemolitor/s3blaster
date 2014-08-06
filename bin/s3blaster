@@ -63,12 +63,14 @@ if (op === 'PUT') {
   var s3Bucket = argv._[2];
   var destPath = argv._[3] || '.';
 
-  s3blaster.put(srcDir, s3Bucket, destPath, argv, function (err, copied) {
+  s3blaster.put(srcDir, s3Bucket, destPath, argv, function (err, report) {
     if (err) {
       console.error('Error putting from', srcDir, 'to', destPath, '-', err);
       process.exit(1);
     }
-    console.log('Put', copied, 'files from', srcDir, 'to', s3Bucket, 'successfully');
+
+    console.log('Successfully put', report.numFiles, 'files to ' + s3Bucket + ',',
+                report.numErrors, 'errors,', report.bytes, 'bytes transferred.');
     process.exit(0);
   });
 } else if (op === 'GET') {
@@ -119,20 +121,21 @@ if (op === 'PUT') {
       console.error('Error copying from bucket', srcBucket, '-', srcPrefix, '-', err);
       process.exit(1);
     }
-    console.log('Copied', copied, 'objects from', srcBucket, '-', srcPrefix);
+    console.log('Copied', copied, 'files from', srcBucket, 'to', dstBucket);
     process.exit(0);
   });
 } else if (op === 'PUT_LINKS') {
   var srcDir = argv._[1];
   var bucket = argv._[2];
 
-  s3blaster.putLinks(srcDir, bucket, argv, function (err, copied) {
+  s3blaster.putLinks(srcDir, bucket, argv, function (err, report) {
     if (err) {
       console.error('Error fixing links - ', err);
       process.exit(1);
     }
 
-    console.log('Put', copied, 'links to', bucket);
+    console.log('Successfully put', report.numFiles, 'links to ' + bucket + ',',
+                report.numErrors, 'errors,', report.bytes, 'bytes transferred.');
     process.exit(0);
   });
 } else if (op === 'PUT_LATEST') {
@@ -141,13 +144,14 @@ if (op === 'PUT') {
   var lastModified = moment(argv._[3])._d;
 
   console.log('Putting files modified since', lastModified.toISOString(), 'to', bucket, '...');
-  s3blaster.putLatest(srcDir, bucket, lastModified, argv, function (err, copied) {
+  s3blaster.putLatest(srcDir, bucket, lastModified, argv, function (err, report) {
     if (err) {
       console.error('Error copying files - ', err);
       process.exit(1);
     }
 
-    console.log('Put', copied, 'files to', bucket);
+    console.log('Successfully put', report.numFiles, 'files to ' + bucket + ',',
+                report.numErrors, 'errors,', report.bytes, 'bytes transferred.');
     process.exit(0);
   });
 }
