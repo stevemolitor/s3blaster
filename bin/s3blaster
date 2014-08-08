@@ -63,12 +63,13 @@ if (op === 'PUT') {
   var s3Bucket = argv._[2];
   var destPath = argv._[3] || '.';
 
-  s3blaster.put(srcDir, s3Bucket, destPath, argv, function (err, copied) {
+  s3blaster.put(srcDir, s3Bucket, destPath, argv, function (err, report) {
     if (err) {
       console.error('Error putting from', srcDir, 'to', destPath, '-', err);
       process.exit(1);
     }
-    console.log('Put', copied, 'files from', srcDir, 'to', s3Bucket, 'successfully');
+    console.log('Put', report.numFiles, 'files from', srcDir, 'to', s3Bucket, 'successfully,',
+               report.numErrors, 'errors,', report.bytes, 'total bytes transferred.');
     process.exit(0);
   });
 } else if (op === 'GET') {
