@@ -22,7 +22,7 @@ describe('s3blaster', function () {
     process.chdir(__dirname);
     s3blaster.del(BUCKET, function (err) {
       expect(err).to.not.exist;
-      s3blaster.put(LOCAL_FOLDER, BUCKET, '', done);
+      s3blaster.put(LOCAL_FOLDER, BUCKET, '', {limit: 20}, done);
     });
   });
 
