@@ -16,12 +16,13 @@ chai.config.includeStack = true;
 
 describe('s3blaster', function () {
   var BUCKET = 's3blaster-test';
-  var LOCAL_FOLDER = path.resolve(__dirname, 'test-content');
+  var LOCAL_FOLDER = 'test-content';
 
   beforeEach(function (done) {
+    process.chdir(__dirname);
     s3blaster.del(BUCKET, function (err) {
       expect(err).to.not.exist;
-      s3blaster.put(LOCAL_FOLDER, BUCKET, 'test-content', done);
+      s3blaster.put(LOCAL_FOLDER, BUCKET, '', done);
     });
   });
 
