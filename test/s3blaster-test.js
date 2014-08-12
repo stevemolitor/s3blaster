@@ -19,10 +19,10 @@ describe('s3blaster', function () {
   var LOCAL_FOLDER = path.resolve(__dirname, 'test-content');
 
   beforeEach(function (done) {
-   s3blaster.del(BUCKET, function (err) {
-     expect(err).to.not.exist;
+    s3blaster.del(BUCKET, function (err) {
+      expect(err).to.not.exist;
       s3blaster.put(LOCAL_FOLDER, BUCKET, 'test-content', done);
-   });
+    });
   });
 
   it('should LIST directories', function (done) {
