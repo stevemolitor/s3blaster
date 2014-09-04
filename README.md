@@ -19,6 +19,20 @@ before running, to provide the AWS credentials.
 Recursively put local files and directories into S3 at key (folder or file).
 
 
+* PUT_LINKS
+
+```PUT_LINKS local_folder bucket ```
+
+Fix links in source directory to S3.
+
+
+* PUT_LATEST
+
+```PUT_LATEST local_folder bucket last-modified ```
+
+Put all files from source dir modifed after last-modified to S3.
+
+
 * GET
 
 ```GET bucket key local_folder```
@@ -45,20 +59,6 @@ Delete all objects in S3 bucket starting with prefix, or all objects if no prefi
 ```COPY source-bucket source-prefix destination-bucket destination-prefix```
 
 Copy all objects in S3 in source bucket starting with prefix to destination bucket
-
-
-* PUT_LINKS
-
-```PUT_LINKS source-dir bucket ```
-
-Fix links in source directory to S3.
-
-
-* PUT_LATEST
-
-```PUT_LATEST source-dir bucket last-modified ```
-
-Put all files from source dir modifed after last-modified to S3.
 
 
 ## Examples
@@ -91,4 +91,10 @@ display this help message
 
 ```--v, --verbose```
 verbose mode
+
+```--e, --exclude```
+exclude files matching regular expcession
+
+```--limit, --```
+number of files to process concurrently. Higher values are faster but may cause timeouts or memory problems.
 
