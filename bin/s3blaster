@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var s3blaster = require('../lib/s3blaster');
+var putDirectory = require('../lib/put-directory');
 var yargs = require('yargs');
 var usage = require('../lib/usage');
 var listStream = require('../lib/list-stream');
@@ -55,15 +56,29 @@ if (argv.h) {
   process.exit(0);
 }
 
+function putFilterFor(op) {
+  if (op === 'PUT') {
+    return function (entry) { return true; }
+  } else if (op === 'PUT_LINKS') {
+    return function (entry) { return entry.linkPath; };
+  } else if (op === 'PUT_LATEST') {
+    return function (entry) { return lastModified < entry.stat.mtime; };
+  } else {
+    throw new Error('Unexpected PUT_ operation ' + op);
+  }
+}
+
 // switch on operation and run s3blaster
 var op = argv._[0];
 
-if (op === 'PUT') {
+if (op.match(/^PUT/)) {
   var srcDir = argv._[1];
   var s3Bucket = argv._[2];
   var destPath = argv._[3] || '.';
+  var filterFn = putFilterFor(op);
 
-  s3blaster.put(srcDir, s3Bucket, destPath, argv, function (err, report) {
+//   s3blaster.put(srcDir, s3Bucket, destPath, filterFn, argv, function (err, report) {
+  putDirectory(srcDir, s3Bucket, destPath, filterFn, argv, function (err, report) {
     if (err) {
       console.error('Error putting from', srcDir, 'to', destPath, '-', err);
       process.exit(1);
@@ -123,32 +138,6 @@ if (op === 'PUT') {
     console.log('Copied', copied, 'objects from', srcBucket, '-', srcPrefix);
     process.exit(0);
   });
-} else if (op === 'PUT_LINKS') {
-  var srcDir = argv._[1];
-  var bucket = argv._[2];
-
-  s3blaster.putLinks(srcDir, bucket, argv, function (err, copied) {
-    if (err) {
-      console.error('Error fixing links - ', err);
-      process.exit(1);
-    }
-
-    console.log('Put', copied, 'links to', bucket);
-    process.exit(0);
-  });
-} else if (op === 'PUT_LATEST') {
-  var srcDir = argv._[1];
-  var bucket = argv._[2];
-  var lastModified = moment(argv._[3])._d;
-
-  console.log('Putting files modified since', lastModified.toISOString(), 'to', bucket, '...');
-  s3blaster.putLatest(srcDir, bucket, lastModified, argv, function (err, copied) {
-    if (err) {
-      console.error('Error copying files - ', err);
-      process.exit(1);
-    }
-
-    console.log('Put', copied, 'files to', bucket);
-    process.exit(0);
-  });
+} else {
+  throw new Error('Unexpected operation ' + op);
 }
