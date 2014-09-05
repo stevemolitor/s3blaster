@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var s3blaster = require('../lib/s3blaster');
-var putDirectory = require('../lib/put-directory');
 var yargs = require('yargs');
 var usage = require('../lib/usage');
 var listStream = require('../lib/list-stream');
@@ -78,7 +77,7 @@ if (op.match(/^PUT/)) {
   var filterFn = putFilterFor(op);
 
 //   s3blaster.put(srcDir, s3Bucket, destPath, filterFn, argv, function (err, report) {
-  putDirectory(srcDir, s3Bucket, destPath, filterFn, argv, function (err, report) {
+  s3blaster.put(srcDir, s3Bucket, destPath, filterFn, argv, function (err, report) {
     if (err) {
       console.error('Error putting from', srcDir, 'to', destPath, '-', err);
       process.exit(1);
