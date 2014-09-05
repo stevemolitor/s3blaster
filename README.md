@@ -95,6 +95,15 @@ verbose mode
 ```--e, --exclude```
 exclude files matching regular expcession
 
+```--d, --directoryExclude```
+exclude directories matching regular expression
+
 ```--limit, --```
 number of files to process concurrently. Higher values are faster but may cause timeouts or memory problems.
+
+```--o, --out```
+write standard output to file
+
+```--r, --errorOut```
+write error output ot file
 
