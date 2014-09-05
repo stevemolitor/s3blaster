@@ -5,6 +5,8 @@ var yargs = require('yargs');
 var usage = require('../lib/usage');
 var listStream = require('../lib/list-stream');
 var moment = require('moment');
+var fs = require('fs');
+var util = require('util');
 
 // validates command line arguments
 function validateArgs(argv, opts) {
@@ -53,6 +55,22 @@ var argv = yargs.argv;
 if (argv.h) {
   yargs.showHelp();
   process.exit(0);
+}
+
+function logToFile(name, filename) {
+  var out = fs.createWriteStream(filename);
+  console[name] = function () {
+    out.write(util.format.apply(null, arguments));
+    out.write('\n');
+  }
+}
+
+// redirect output if requested
+if (argv.out) {
+  logToFile('log', argv.out);
+}
+if (argv.errorOut) {
+  logToFile('error', argv.errorOut);
 }
 
 function putFilterFor(op) {
