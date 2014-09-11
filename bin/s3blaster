@@ -92,9 +92,15 @@ if (op.match(/^PUT/)) {
   var srcDir = argv._[1];
   var s3Bucket = argv._[2];
   var destPath = argv._[3] || '.';
+
+  var lastModified;
+  if (op === 'PUT_LATEST') {
+    lastModified = moment(argv._[3])._d.getTime();
+    destPath = argv._[4] || '.'
+  }
+
   var filterFn = putFilterFor(op);
 
-//   s3blaster.put(srcDir, s3Bucket, destPath, filterFn, argv, function (err, report) {
   s3blaster.put(srcDir, s3Bucket, destPath, filterFn, argv, function (err, report) {
     if (err) {
       console.error('Error putting from', srcDir, 'to', destPath, '-', err);
