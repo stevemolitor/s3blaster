@@ -79,7 +79,12 @@ function putFilterFor(op) {
   } else if (op === 'PUT_LINKS') {
     return function (entry) { return entry.linkPath; };
   } else if (op === 'PUT_LATEST') {
-    return function (entry) { return lastModified < entry.stat.mtime; };
+    return function (entry) {
+      if (modifiedBefore) {
+        return lastModified < entry.stat.mtime && modifiedBefore > entry.stat.mtime;
+      }
+      return lastModified < entry.stat.mtime; 
+    };
   } else {
     throw new Error('Unexpected PUT_ operation ' + op);
   }
@@ -94,9 +99,15 @@ if (op.match(/^PUT/)) {
   var destPath = argv._[3] || '.';
 
   var lastModified;
+  var modifiedBefore;
   if (op === 'PUT_LATEST') {
     lastModified = moment(argv._[3])._d.getTime();
-    destPath = argv._[4] || '.'
+    if (argv._[4]) {
+      modifiedBefore = moment(argv._[4])._d.getTime();
+      destPath = argv._[5] || '.';
+    } else {
+      destPath = argv._[4] || '.'
+    }
   }
 
   var filterFn = putFilterFor(op);

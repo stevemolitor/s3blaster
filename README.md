@@ -28,9 +28,9 @@ Fix links in source directory to S3.
 
 * PUT_LATEST
 
-```PUT_LATEST local_folder bucket last-modified ```
+```PUT_LATEST local_folder bucket last-modified modified-before```
 
-Put all files from source dir modifed after last-modified to S3.
+Put all files from source dir modifed after last-modified to S3, and before modified-before if supplied.
 
 
 * GET
